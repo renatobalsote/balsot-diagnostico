@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -233,14 +232,14 @@ export default async function handler(req, res) {
 </body>
 </html>`;
 
-      await fetch('https://api.resend.com/emails', {
+      const emailResult = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${resendKey}`,
         },
         body: JSON.stringify({
-          from: 'Balsot Diagnóstico <diagnostico@resend.dev>',
+          from: 'Balsot <onboarding@resend.dev>',
           to: [emailTo],
           subject: `🔔 Novo Lead: ${leadName} — ${leadEmpresa} (Score ${score})`,
           html: emailHtml,
