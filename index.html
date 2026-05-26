@@ -490,8 +490,7 @@ function renderReport(r){
         <div class="rep-label">📋 Diagnóstico Estratégico · Balsot</div>
         <div class="rep-btns">
           <button class="rbtn rbtn-new" onclick="resetForm()">← Novo</button>
-          <button class="rbtn rbtn-pdf" onclick="downloadPDF()">⬇ Baixar PDF</button>
-        </div>
+          </div>
       </div>
       <div class="rep-hero">
         <div class="rh-tag">Diagnóstico Estratégico · Balsot</div>
@@ -514,7 +513,7 @@ function renderReport(r){
       ${r.spin?`<div class="spin-sec"><div class="spin-label">◆ ANÁLISE SPIN — Situação · Problema · Implicação · Necessidade</div><div class="spin-grid"><div class="spin-item spin-S"><div class="spin-item-label">S — Situação</div><div class="spin-item-text">${r.spin.situacao}</div></div><div class="spin-item spin-P"><div class="spin-item-label">P — Problema</div><div class="spin-item-text">${r.spin.problema}</div></div><div class="spin-item spin-I"><div class="spin-item-label">I — Implicação</div><div class="spin-item-text">${r.spin.implicacao}</div></div><div class="spin-item spin-N"><div class="spin-item-label">N — Necessidade</div><div class="spin-item-text">${r.spin.necessidade}</div></div></div></div>`:''}
       ${r.plano?.length?`<div class="rep-sec"><div class="rep-sec-head"><span class="rsh-icon">🗺️</span><span class="rsh-title">Plano de Ação</span></div><div class="rep-sec-body"><div class="plan-phases">${r.plano.map((f,i)=>`<div class="plan-ph ph${i+1}"><div class="plan-ph-head">${f.fase}</div><div class="plan-actions">${(f.acoes||[]).map(a=>`<div class="plan-act"><div class="plan-dot"></div><span>${a}</span></div>`).join('')}</div></div>`).join('')}</div></div></div>`:''}
       ${r.potencial?`<div class="pot-box"><div class="pot-lbl">💡 Potencial Identificado</div><div class="pot-text">"${r.potencial}"</div></div>`:''}
-      ${r.copy_cta?`<div class="copy-cta"><div class="cta-title">O que está em jogo para o seu negócio</div><div class="cta-sub">${r.copy_cta}</div><button class="cta-btn">📅 Quero Minha Sessão Estratégica Gratuita</button></div>`:''}
+      ${r.copy_cta?`<div class="copy-cta"><div class="cta-title">O que está em jogo para o seu negócio</div><div class="cta-sub">${r.copy_cta}</div><a href="https://wa.me/5511976925351?text=Ol%C3%A1%2C%20acabei%20de%20preencher%20o%20diagn%C3%B3stico%20estrat%C3%A9gico%20da%20Balsot%20e%20quero%20agendar%20minha%20sess%C3%A3o%20gratuita!" target="_blank" class="cta-btn" style="display:inline-block;text-decoration:none;">📅 Quero Minha Sessão Estratégica Gratuita</a></div>`:''}
     </div>`;
 }
 
