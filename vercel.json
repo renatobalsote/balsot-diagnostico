@@ -1,9 +1,23 @@
 {
   "version": 2,
-  "functions": {
-    "api/diagnostico.js": {
-      "memory": 256,
-      "maxDuration": 30
+  "builds": [
+    {
+      "src": "api/diagnostico.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/api/diagnostico",
+      "dest": "/api/diagnostico.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
