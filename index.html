@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -515,7 +514,14 @@ function renderReport(r){
       ${r.spin?`<div class="spin-sec"><div class="spin-label">◆ ANÁLISE SPIN — Situação · Problema · Implicação · Necessidade</div><div class="spin-grid"><div class="spin-item spin-S"><div class="spin-item-label">S — Situação</div><div class="spin-item-text">${r.spin.situacao}</div></div><div class="spin-item spin-P"><div class="spin-item-label">P — Problema</div><div class="spin-item-text">${r.spin.problema}</div></div><div class="spin-item spin-I"><div class="spin-item-label">I — Implicação</div><div class="spin-item-text">${r.spin.implicacao}</div></div><div class="spin-item spin-N"><div class="spin-item-label">N — Necessidade</div><div class="spin-item-text">${r.spin.necessidade}</div></div></div></div>`:''}
       ${r.plano?.length?`<div class="rep-sec"><div class="rep-sec-head"><span class="rsh-icon">🗺️</span><span class="rsh-title">Plano de Ação</span></div><div class="rep-sec-body"><div class="plan-phases">${r.plano.map((f,i)=>`<div class="plan-ph ph${i+1}"><div class="plan-ph-head">${f.fase}</div><div class="plan-actions">${(f.acoes||[]).map(a=>`<div class="plan-act"><div class="plan-dot"></div><span>${a}</span></div>`).join('')}</div></div>`).join('')}</div></div></div>`:''}
       ${r.potencial?`<div class="pot-box"><div class="pot-lbl">💡 Potencial Identificado</div><div class="pot-text">"${r.potencial}"</div></div>`:''}
-      ${r.copy_cta?`<div class="copy-cta"><div class="cta-title">O que está em jogo para o seu negócio</div><div class="cta-sub">${r.copy_cta}</div><button class="cta-btn">📅 Quero Minha Sessão Estratégica Gratuita</button></div>`:''}
+      ${r.copy_cta?`<div class="copy-cta"><div class="cta-title">O que está em jogo para o seu negócio</div><div class="cta-sub">${r.copy_cta}</div><a href="https://wa.me/5511976925351?text=Ol%C3%A1%2C%20acabei%20de%20preencher%20o%20diagn%C3%B3stico%20estrat%C3%A9gico%20da%20Balsot%20e%20quero%20agendar%20minha%20sess%C3%A3o%20gratuita!" 
+  target="_blank" style="display:inline-block;padding:14px 32px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;
+  color:#0a0800;text-decoration:none;
+  box-shadow:0 6px 28px rgba(201,168,76,0.4);">
+  📅 Quero Minha Sessão Estratégica Gratuita
+</a></div>`:''}
     </div>`;
 }
 
@@ -527,6 +533,18 @@ function resetForm(){
   setProgress(0);setPhase('');
 }
 
+function sanitize(str){
+  if(!str) return '';
+  return String(str)
+    .replace(/[áàâã]/g,'a').replace(/[ÁÀÂÃ]/g,'A')
+    .replace(/[éèê]/g,'e').replace(/[ÉÈÊ]/g,'E')
+    .replace(/[íì]/g,'i').replace(/[ÍÌ]/g,'I')
+    .replace(/[óòôõ]/g,'o').replace(/[ÓÒÔÕ]/g,'O')
+    .replace(/[úù]/g,'u').replace(/[ÚÙ]/g,'U')
+    .replace(/[ç]/g,'c').replace(/[Ç]/g,'C')
+    .replace(/[ñ]/g,'n').replace(/[Ñ]/g,'N')
+    .replace(/[&]/g,'e').replace(/[<>]/g,' ');
+}
 function downloadPDF(){
   const r=window._report;
   if(!r||!window.jspdf){showToast('Aguarde...');return;}
@@ -546,37 +564,37 @@ function downloadPDF(){
   doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(...hex('#ffffff'));
   doc.text('DIAGNÓSTICO',W/2,88,{align:'center'});doc.text('ESTRATÉGICO',W/2,100,{align:'center'});
   doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...hex('#c9a84c'));
-  doc.text(r.empresa||'',W/2,113,{align:'center'});
+  doc.text(sanitize(r.empresa)||'',W/2,113,{align:'center'});
   doc.setFontSize(8);doc.setTextColor(...hex('#8892b0'));
-  doc.text((r.nome||'')+' · '+(r.nicho||''),W/2,120,{align:'center'});
+  doc.text(sanitize(r.nome||'')+' · '+sanitize(r.nicho||''),W/2,120,{align:'center'});
   doc.setDrawColor(...hex(scC));doc.setFillColor(...hex('#161b26'));doc.circle(W/2,150,18,'FD');
   doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...hex(scC));doc.text(String(r.score||0),W/2,155,{align:'center'});
   doc.setFont('helvetica','normal');doc.setFontSize(6);doc.setTextColor(...hex('#8892b0'));doc.text('SCORE',W/2,161,{align:'center'});
-  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(...hex(scC));doc.text(r.nivel||'',W/2,171,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(...hex(scC));doc.text(sanitize(r.nivel)||'',W/2,171,{align:'center'});
   doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...hex('#5a6180'));
   doc.text('Gerado em '+new Date().toLocaleDateString('pt-BR')+' · Confidencial',W/2,283,{align:'center'});
   const addPg=()=>{doc.addPage();doc.setFillColor('#fff');doc.rect(0,0,W,297,'F');doc.setFillColor(...hex('#0e1117'));doc.rect(0,0,W,10,'F');doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(...hex('#c9a84c'));doc.text('BALSOT · DIAGNÓSTICO ESTRATÉGICO',ml,7);doc.setFont('helvetica','normal');doc.setTextColor(...hex('#8892b0'));doc.text('Pág. '+doc.internal.getNumberOfPages(),W-mr,7,{align:'right'});y=18;};
   const wrap=(t,w)=>doc.splitTextToSize(t||'',w);
   const box=(title,desc,bg,line,tc)=>{const ls=wrap(desc,cw-16);const bh=7+ls.length*4.5+5;if(y+bh>278)addPg();doc.setFillColor(...hex(bg));doc.roundedRect(ml,y,cw,bh,2,2,'F');doc.setFillColor(...hex(line));doc.rect(ml,y,3,bh,'F');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...hex(tc));doc.text(title,ml+7,y+5.5);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...hex('#374151'));doc.text(ls,ml+7,y+10.5);y+=bh+4;};
   addPg();
-  const rl=wrap(r.resumo||'',cw-14);const rh=rl.length*4.5+14;
+  const rl=wrap(sanitize(r.resumo)||'',cw-14);const rh=rl.length*4.5+14;
   doc.setFillColor(...hex('#f8f9fa'));doc.roundedRect(ml,y,cw,rh,2,2,'F');doc.setFillColor(...hex('#c9a84c'));doc.rect(ml,y,3,rh,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...hex('#c9a84c'));doc.text('RESUMO EXECUTIVO',ml+7,y+7);
   doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...hex('#374151'));doc.text(rl,ml+7,y+13);y+=rh+8;
-  if(r.pontos_fortes?.length){doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#166534'));doc.text('PONTOS FORTES',ml,y);y+=6;r.pontos_fortes.forEach(p=>box(p.titulo,p.descricao,'#f0fdf4','#16a34a','#166534'));}
-  if(r.alertas?.length){if(y+10>278)addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#991b1b'));doc.text('ALERTAS CRÍTICOS',ml,y);y+=6;r.alertas.forEach(a=>box(a.titulo,a.impacto,'#fef2f2','#dc2626','#991b1b'));}
-  if(r.oportunidades?.length){addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#0f766e'));doc.text('OPORTUNIDADES',ml,y);y+=6;r.oportunidades.forEach(o=>box(o.titulo+' ['+o.urgencia+']',(o.descricao||'')+(o.impacto_estimado?'\n→ '+o.impacto_estimado:''),'#f0fdfa','#0d9488','#0f766e'));}
-  if(r.spin){addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#c9a84c'));doc.text('ANÁLISE SPIN',ml,y);y+=6;[{l:'S — SITUAÇÃO',t:r.spin.situacao,bg:'#eff6ff',ln:'#3b82f6',tc:'#1e40af'},{l:'P — PROBLEMA',t:r.spin.problema,bg:'#fef2f2',ln:'#ef4444',tc:'#991b1b'},{l:'I — IMPLICAÇÃO',t:r.spin.implicacao,bg:'#fff7ed',ln:'#f97316',tc:'#9a3412'},{l:'N — NECESSIDADE',t:r.spin.necessidade,bg:'#fffbeb',ln:'#c9a84c',tc:'#92400e'}].forEach(s=>box(s.l,s.t,s.bg,s.ln,s.tc));}
-  if(r.copy_cta){if(y+20>278)addPg();const cl=wrap(r.copy_cta,cw-14);const ch=cl.length*4.5+14;if(y+ch>278)addPg();doc.setFillColor(...hex('#fffbeb'));doc.roundedRect(ml,y,cw,ch,3,3,'F');doc.setFillColor(...hex('#c9a84c'));doc.rect(ml,y,3,ch,'F');doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...hex('#92400e'));doc.text('O QUE ESTÁ EM JOGO',ml+7,y+7);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(...hex('#374151'));doc.text(cl,ml+7,y+13);y+=ch+8;}
-  if(r.plano?.length){addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#1e3a5f'));doc.text('PLANO DE AÇÃO',ml,y);y+=6;const pC=['#1d4ed8','#0f766e','#7c3aed'],pB=['#eff6ff','#f0fdfa','#faf5ff'];r.plano.forEach((f,i)=>{const bh=10+(f.acoes||[]).length*6+4;if(y+bh>278)addPg();doc.setFillColor(...hex(pB[i]||'#f9fafb'));doc.roundedRect(ml,y,cw,bh,2,2,'F');doc.setFillColor(...hex(pC[i]||'#374151'));doc.roundedRect(ml,y,cw,9,2,2,'F');doc.rect(ml,y+6,cw,3,'F');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor('#fff');doc.text(f.fase||'',ml+5,y+7);let ay=y+14;(f.acoes||[]).forEach(a=>{doc.setFillColor(...hex(pC[i]));doc.circle(ml+4,ay-0.5,1.2,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...hex('#1f2937'));doc.text(wrap(a,cw-12)[0]||'',ml+8,ay);ay+=6;});y+=bh+5;});}
+  if(r.pontos_fortes?.length){doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#166534'));doc.text('PONTOS FORTES',ml,y);y+=6;r.pontos_fortes.forEach(p=>box(sanitize(p.titulo),sanitize(p.descricao),'#f0fdf4','#16a34a','#166534'));}
+  if(r.alertas?.length){if(y+10>278)addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#991b1b'));doc.text('ALERTAS CRÍTICOS',ml,y);y+=6;r.alertas.forEach(a=>box(sanitize(a.titulo),sanitize(a.impacto),'#fef2f2','#dc2626','#991b1b'));}
+  if(r.oportunidades?.length){addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#0f766e'));doc.text('OPORTUNIDADES',ml,y);y+=6;r.oportunidades.forEach(o=>box(sanitize(o.titulo)+' ['+sanitize(o.urgencia)+']',sanitize((o.descricao||'')+(o.impacto_estimado?'\n→ '+o.impacto_estimado:''))),'#f0fdfa','#0d9488','#0f766e'));}
+  if(r.spin){addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#c9a84c'));doc.text('ANÁLISE SPIN',ml,y);y+=6;[{l:'S — SITUAÇÃO',t:r.spin.situacao,bg:'#eff6ff',ln:'#3b82f6',tc:'#1e40af'},{l:'P - PROBLEMA',t:r.spin.problema,bg:'#fef2f2',ln:'#ef4444',tc:'#991b1b'},{l:'I — IMPLICAÇÃO',t:r.spin.implicacao,bg:'#fff7ed',ln:'#f97316',tc:'#9a3412'},{l:'N - NECESSIDADE',t:r.spin.necessidade,bg:'#fffbeb',ln:'#c9a84c',tc:'#92400e'}].forEach(s=>box(sanitize(s.l),sanitize(s.t),s.bg,s.ln,s.tc));}
+  if(r.copy_cta){if(y+20>278)addPg();const cl=wrap(r.copy_cta,cw-14);const ch=cl.length*4.5+14;if(y+ch>278)addPg();doc.setFillColor(...hex('#fffbeb'));doc.roundedRect(ml,y,cw,ch,3,3,'F');doc.setFillColor(...hex('#c9a84c'));doc.rect(ml,y,3,ch,'F');doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...hex('#92400e'));doc.text('O QUE ESTÁ EM JOGO',ml+7,y+7);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(...hex('#374151'));const clSan=wrap(sanitize(r.copy_cta||''),cw-14);doc.text(clSan,ml+7,y+13);y+=ch+8;}
+  if(r.plano?.length){addPg();doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...hex('#1e3a5f'));doc.text('PLANO DE AÇÃO',ml,y);y+=6;const pC=['#1d4ed8','#0f766e','#7c3aed'],pB=['#eff6ff','#f0fdfa','#faf5ff'];r.plano.forEach((f,i)=>{const bh=10+(f.acoes||[]).length*6+4;if(y+bh>278)addPg();doc.setFillColor(...hex(pB[i]||'#f9fafb'));doc.roundedRect(ml,y,cw,bh,2,2,'F');doc.setFillColor(...hex(pC[i]||'#374151'));doc.roundedRect(ml,y,cw,9,2,2,'F');doc.rect(ml,y+6,cw,3,'F');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor('#fff');doc.text(sanitize(f.fase)||'',ml+5,y+7);let ay=y+14;(f.acoes||[]).forEach(a=>{doc.setFillColor(...hex(pC[i]));doc.circle(ml+4,ay-0.5,1.2,'F');doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...hex('#1f2937'));doc.text(wrap(sanitize(a),cw-12)[0]||'',ml+8,ay);ay+=6;});y+=bh+5;});}
   doc.addPage();doc.setFillColor(...hex('#0e1117'));doc.rect(0,0,W,297,'F');doc.setFillColor(...hex('#c9a84c'));doc.rect(0,0,W,2,'F');doc.rect(0,295,W,2,'F');
   try{doc.addImage('data:image/jpeg;base64,'+LOGO_B64,'JPEG',W/2-12,30,24,24);}catch(e){}
   doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor('#fff');doc.text('Próximo Passo',W/2,74,{align:'center'});
   doc.setFillColor(...hex('#c9a84c'));doc.rect(W/2-20,77,40,1,'F');
-  const cl2=wrap(r.cta||'',cw);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...hex('#8892b0'));doc.text(cl2,W/2,86,{align:'center'});
+  const cl2=wrap(sanitize(r.cta)||'',cw);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...hex('#8892b0'));doc.text(cl2,W/2,86,{align:'center'});
   doc.setFillColor(...hex('#c9a84c'));doc.roundedRect(W/2-35,102,70,12,3,3,'F');doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...hex('#0a0800'));doc.text('AGENDAR SESSÃO ESTRATÉGICA',W/2,110,{align:'center'});
   doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...hex('#5a6180'));
-  doc.text(r.whatsapp||'',W/2,136,{align:'center'});doc.text(r.email||'',W/2,142,{align:'center'});
+  doc.text(sanitize(r.whatsapp)||'',W/2,136,{align:'center'});doc.text(sanitize(r.email)||'',W/2,142,{align:'center'});
   doc.text('balsot.com.br · Diagnóstico Confidencial',W/2,280,{align:'center'});
   doc.save('Diagnostico_Balsot_'+(r.empresa||'empresa').replace(/\s/g,'_')+'.pdf');
   showToast('✓ PDF baixado com sucesso!');
