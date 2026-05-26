@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -233,7 +234,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--text);}
         <span class="srv-tag">Automações</span>
         <span class="srv-tag">Consultoria</span>
       </div>
-      <button class="btn-start" onclick="startForm()">Iniciar Diagnóstico Gratuito →</button>
+      <button class="btn-start" id="btn-iniciar">Iniciar Diagnóstico Gratuito →</button>
     </div>
   </div>
 
@@ -281,6 +282,12 @@ const STEPS = [
 let cur = 0, ans = {};
 
 function show(id){document.getElementById(id).style.display='flex';}
+
+// Botão iniciar com addEventListener para evitar problemas de onclick inline
+document.addEventListener('DOMContentLoaded', function(){
+  var btnIniciar = document.getElementById('btn-iniciar');
+  if(btnIniciar) btnIniciar.addEventListener('click', startForm);
+});
 function hide(id){document.getElementById(id).style.display='none';}
 function setPhase(t){const el=document.getElementById('phase-tag');el.textContent=t;el.style.display=t?'':'none';}
 function setProgress(p){document.getElementById('prog-fill').style.width=p+'%';}
